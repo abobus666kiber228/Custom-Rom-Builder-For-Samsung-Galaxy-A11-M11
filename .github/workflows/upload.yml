@@ -9,15 +9,15 @@
           GSI:
             description: 'Direct link for Gsi image'
             required: true
-            default: ''
+            default: 'https://drive.google.com/file/d/1jrMDIeHFmZkrCDb96CRLlnuaOtGzdglW/view?usp=sharing'
           ARCH:
             description: 'ARM64 or ARM32?'
             required: true
-            default: 'ARM64'
+            default: '64'
           NAME:
             description: 'Rom Name'
             required: true
-            default: 'CustomRom'
+            default: 'Android'
 
     jobs:
       Build:
