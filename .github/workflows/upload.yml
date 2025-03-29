@@ -1,57 +1,57 @@
-    name: Custom Rom Builder Samsung Galaxy A11/M11
+name: Custom Rom Builder Samsung Galaxy A11/M11
 
-    on:
-      push:
-        branches:
-          - dev
-      workflow_dispatch:
-        inputs:
-          GSI:
-            description: 'Direct link for Gsi image'
-            required: true
-            default: 'https://drive.google.com/file/d/1jrMDIeHFmZkrCDb96CRLlnuaOtGzdglW/view?usp=sharing'
-          ARCH:
-            description: 'ARM64 or ARM32?'
-            required: true
-            default: '64'
-          NAME:
-            description: 'Rom Name'
-            required: true
-            default: 'Android'
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+    inputs:
+      GSI:
+        description: 'Direct link for system.img.xz'
+        required: true
+        default: 'https://drive.google.com/file/d/1jrMDIeHFmZkrCDb96CRLlnuaOtGzdglW/view?usp=sharing'
+      ARCH:
+        description: 'ARM64 or ARM32?'
+        required: true
+        default: 'ARM64'
+      NAME:
+        description: 'Rom Name'
+        required: true
+        default: 'CustomRom'
 
-    jobs:
-      Build:
-        runs-on: ubuntu-latest
+jobs:
+  Build:
+    runs-on: ubuntu-latest
 
-        steps:
-        - name: Checkout Repository
-          uses: actions/checkout@v2
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
 
-        - name: Preparing Files
-          run: |
-            sudo apt update # Update package lists
-            sudo apt install wget unzip -y # Install wget and unzip
-            wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
-            unzip a11q.zip
-            rm -r a11q.zip
-            git clone https://github.com/abobus666kiber228/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11 # Клонируем ТВОЙ репозиторий!
+    - name: Preparing Files
+      run: |
+        sudo apt update
+        sudo apt install wget unzip -y
+        wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
+        unzip a11q.zip
+        rm -r a11q.zip
+        git clone https://github.com/abobus666kiber228/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11
 
-        - name: Downloading your GSI
-          run: |
-            GSI_URL="${{ github.event.inputs.GSI }}"
-            wget -P "./temp" "$GSI_URL"
-            GSI_FILENAME=$(basename "$GSI_URL")
-            mv "./temp/$GSI_FILENAME" ./temp/gsi.img.xz
-            chmod 777 * # Make everything executable
+    - name: Downloading system.img.xz
+      run: |
+        GSI_URL="${{ github.event.inputs.GSI }}"
+        wget -P "./temp" "$GSI_URL"
+        SYSTEM_IMG_XZ_FILENAME=$(basename "$GSI_URL")
+        echo "Downloaded system.img.xz as $SYSTEM_IMG_XZ_FILENAME"
+        chmod 777 *
 
-        - name: Building
-          run: |
-            ./arm${{ github.event.inputs.ARCH }}_git
-            zip Custom_Rom_SDM450.zip ./temp/gsi.img.xz
+    - name: Building
+      run: |
+        ./arm${{ github.event.inputs.ARCH }}_git
+        ls -l ./temp
+        zip -r Custom_Rom_SDM450.zip ./temp/super.img.xz
 
-        - name: Uploading The Zip
-          uses: actions/upload-artifact@v4
-          with:
-            name: ${{ github.event.inputs.NAME }}
-            path: Custom_Rom_SDM450.zip
-    
+    - name: Uploading The Zip
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.inputs.NAME }}
+        path: Custom_Rom_SDM450.zip
