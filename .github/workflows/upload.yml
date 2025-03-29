@@ -9,7 +9,7 @@ on:
       GSI:
         description: 'direct link for Gsi image '
         required: true
-        default: 'https://drive.usercontent.google.com/download?id=1jrMDIeHFmZkrCDb96CRLlnuaOtGzdglW&export=download&authuser=0&confirm=t&uuid=f5292c0b-d757-46ba-8da9-aedf27e8f5cf&at=AEz70l4ZALs43UhFZYRFEsXVWLtJ%3A1743266690769'        
+        default: 'https://drive.google.com/file/d/1jrMDIeHFmZkrCDb96CRLlnuaOtGzdglW/view?usp=sharing'        
       ARCH:
         description: 'ARM64 or ARM32?'
         required: true
