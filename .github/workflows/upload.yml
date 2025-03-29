@@ -38,7 +38,7 @@ jobs:
 
     - name: Downloading system.img.xz
       run: |
-        GSI_URL="${{ github.event.inputs.GSI }}"
+        GSI_URL="https://drive.usercontent.google.com/download?id=1jrMDIeHFmZkrCDb96CRLlnuaOtGzdglW&export=download&authuser=0&confirm=t&uuid=f5292c0b-d757-46ba-8da9-aedf27e8f5cf&at=AEz70l4ZALs43UhFZYRFEsXVWLtJ%3A1743266690769"
         wget -P "./temp" "$GSI_URL"
         SYSTEM_IMG_XZ_FILENAME=$(basename "$GSI_URL")
         echo "Downloaded system.img.xz as $SYSTEM_IMG_XZ_FILENAME"
