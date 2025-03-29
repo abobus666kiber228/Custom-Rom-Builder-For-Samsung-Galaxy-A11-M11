@@ -3,21 +3,21 @@ name: Custom Rom Builder Samsung Galaxy A11/M11
 on:
   push:
     branches:
-      - dev
+      - main  # Change this to your desired branch
   workflow_dispatch:
     inputs:
       GSI:
-        description: 'Direct link for system.img.xz'
+        description: 'direct link for Gsi image '
         required: true
-        default: ''
+        default: ''        
       ARCH:
         description: 'ARM64 or ARM32?'
         required: true
-        default: 'ARM64'
+        default: '64'                
       NAME:
         description: 'Rom Name'
         required: true
-        default: 'CustomRom'
+        default: 'VladOS'                
 
 jobs:
   Build:
@@ -27,35 +27,28 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v2
 
-    - name: Preparing Files
+    - name: Install Dependencies
       run: |
         sudo apt update
-        sudo apt install wget unzip -y
+        sudo apt install -y zip xz-utils unzip p7zip-full wget
+        
+    - name: Preparing Files
+      run: |
         wget https://sourceforge.net/projects/samsung-galaxy-a01-m01/files/a11q.zip
+        git clone https://github.com/abobus666kiber228/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11
         unzip a11q.zip
         rm -r a11q.zip
-        git clone https://github.com/abobus666kiber228/Custom-Rom-Builder-For-Samsung-Galaxy-A11-M11
-
-    - name: Downloading system.img.xz
+    - name: Downloading your GSI
       run: |
-        echo "Скачивание GSI пока отключено"
-        # GSI_URL="${{ github.event.inputs.GSI }}"
-        # wget -P "./temp" "$GSI_URL"
-        # SYSTEM_IMG_XZ_FILENAME=$(basename "$GSI_URL")
-        # echo "Downloaded system.img.xz as $SYSTEM_IMG_XZ_FILENAME"
-        # chmod 777 *
-
+        wget -P "./temp" ${{ github.event.inputs.GSI }} 
+        chmod 755 *
+        chmod 755 ./bin/*
     - name: Building
       run: |
-        echo "Сборка пока отключена"
-        # ./arm${{ github.event.inputs.ARCH }}_git
-        # ls -l ./temp
-        # zip -r Custom_Rom_SDM450.zip ./temp/super.img.xz
-
+        ./arm${{ github.event.inputs.ARCH }}_git
+        
     - name: Uploading The Zip
-      run: |
-        echo "Загрузка artifact пока отключена"
-        # uses: actions/upload-artifact@v4
-        # with:
-        #   name: ${{ github.event.inputs.NAME }}
-        #   path: Custom_Rom_SDM450.zip
+      uses: actions/upload-artifact@v4
+      with:
+        name: ${{ github.event.inputs.NAME }}   # Replace with a suitable name
+        path: zip/Custom_Rom_SDM450.zip
